@@ -29,6 +29,13 @@ class ComicController extends Controller
      */
     public function store(Request $request)
     {
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+        ]);
+
+        Comic::create($validated);
+
         return redirect()->route('comics.index');
     }
 
@@ -59,9 +66,18 @@ class ComicController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+        ]);
+    
+        $comic = Comic::findOrFail($id);
+    
+        $comic->update($validated);
+    
+        return redirect()->route('comics.index');
     }
-
+    
     /**
      * Remove the specified resource from storage.
      */
